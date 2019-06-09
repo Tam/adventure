@@ -1,0 +1,12 @@
+{
+  "name": "adventure",
+  "version": "0.0.1",
+  "description": "A Node.js powered text adventure engine",
+  "main": "src/index.js",
+  "repository": "https://Tam@github.com/Tam/adventure.git",
+  "author": "Tam <hi@tam.sx>",
+  "license": "GNU GPLv3",
+  "dependencies": {
+    "compromise": "^11.13.2"
+  }
+}
