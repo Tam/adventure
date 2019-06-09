@@ -4,6 +4,24 @@ const path = require('path')
 
 const Thing = require('./models/Thing');
 
+nlp.plugin({
+	words: {
+		'throw': 'Verb',
+		'chuck': 'Verb',
+		'cast': 'Verb',
+		'lob': 'Verb',
+	},
+});
+
+const VERB_TO_ACTION = { // TODO: Could this be part of compromise?
+	'take': 'take',
+	'steal': 'take',
+	'snatch': 'take',
+	'grab': 'take',
+	'swipe': 'take',
+	'pick up': 'take',
+};
+
 !function () {
 	// 1. Load Game
 	const args = process.argv;
@@ -63,8 +81,8 @@ const Thing = require('./models/Thing');
 	stdin.addListener('data', d => {
 		const input = d.toString().trim();
 
-		const actions = nlp(input).match('#Conjunction #Adverb? #Verb'); //#Conjunction #Adverb?
-		console.log(actions.out('text'));
+		const actions = nlp(input).match('#Conjunction #Adverb? #Verb');
+		console.log(actions.out('array'));
 	});
 }();
 

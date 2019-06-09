@@ -1,19 +1,19 @@
 const Room = require('../src/models/Room')
-	, Item = require('../src/models/Item');
+	, Item = require('../src/models/Item')
+	, Inventory = require('../src/models/Inventory');
 
 module.exports = ({ player }) => ({
 	title: 'Dungeon!',
 
 	player: {
 		room: 'house_front',
-		inventory: {},
+		inventory: new Inventory(),
 	},
 
 	items: {
 		leaflet: new Item({
 			name: 'Leaflet',
 			description: 'A leaflet',
-			takeable: true,
 			actions: {
 				look: 'A leaflet',
 				read: () => player.inventory.has('leaflet') ? `
@@ -29,6 +29,11 @@ of a lost labyrinth deep in the bowels of the earth, searching for
 vast treasures long hidden from prying eyes, treasures guarded by
 fearsome monsters and diabolical traps!
 				` : 'You can\'t read what you aren\'t holding!',
+				take: (self, room) => {
+					player.inventory.add(self);
+					room.inventory.remove(self);
+					return 'You take the leaflet from mailbox.';
+				}
 			},
 		}),
 	},
@@ -44,12 +49,20 @@ fearsome monsters and diabolical traps!
 			interactables: {
 				mailbox: {
 					name: 'Mailbox',
-					description: self => self.state.open ? self.inventory.has('leaflet') ? 'An open mailbox, there is a leaflet inside.' : 'An empty mailbox.' : 'A box. It holds mail.',
+					description: self =>
+						self.state.open
+							? self.inventory.has('leaflet')
+								? 'An open mailbox, there is a leaflet inside.'
+								: 'An empty mailbox.'
+							: 'A box. It holds mail.',
 					state: {
 						open: false,
 					},
-					inventory: {
+					inventory: new Inventory({
 						leaflet: 'leaflet',
+					}),
+					actions: {
+						take: 'Try as you might, you are unable to pull the mailbox from the ground.'
 					},
 				},
 			},

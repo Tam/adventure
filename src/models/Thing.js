@@ -1,6 +1,6 @@
 class Thing {
 
-	constructor (opts) {
+	constructor (opts = {}) {
 		Object.keys(opts).forEach(key => {
 			this[key] = opts[key];
 		});
