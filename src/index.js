@@ -1,5 +1,6 @@
 const path = require('path')
-	, fs = require('fs');
+	, fs = require('fs')
+	, nlp = require('compromise');
 
 const Thing = require('./models/Thing');
 
@@ -62,8 +63,9 @@ const Thing = require('./models/Thing');
 	stdin.addListener('data', d => {
 		const input = d.toString().trim();
 
-		// TODO: Parser (should support multiple actions in one request by
-		//  splitting on [#Conjucntion #Adverb? #Verb]
-		console.log(input);
+		const actions = nlp(input).match('#Conjunction #Adverb? #Verb'); //#Conjunction #Adverb?
+		console.log(actions.out('text'));
 	});
 }();
+
+// quickly take the ogres large cake and fork and then throw it at him
